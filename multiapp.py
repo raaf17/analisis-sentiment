@@ -1,5 +1,7 @@
+# Import library yang digunakan
 import streamlit as st
 
+# Class MultiApp untuk mengelola setiap page nya
 class MultiApp:
     def __init__(self):
         self.apps = []

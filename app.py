@@ -1,11 +1,13 @@
+# Import library yang digunakan
 import streamlit as st
 from multiapp import MultiApp
-from apps import preprocessing_data, labeling, knn # import your app modules here
+from apps import naive_bayes, preprocessing_data, visualisasi
 
 app = MultiApp()
 
+# Headline aplikasi
 st.markdown("""
-# Analisis Sentiment Twitter dengan Metode K-NearestNeighbors
+# Analisis Sentiment Twitter dengan Metode Naive Bayes
 
 Ini adalah aplikasi yang berfungsi untuk menganalisis sentiment data twitter beserta klasifikasinya
 
@@ -13,9 +15,9 @@ Ini adalah aplikasi yang berfungsi untuk menganalisis sentiment data twitter bes
 
 st.sidebar.header('User Input Features')
 
-# Add all your application here
+# Pemanggilan function untuk setiap page
 app.add_app("Preprocessing Data", preprocessing_data.app)
-app.add_app("Labeling", labeling.app)
-app.add_app("K-NearestNeighbors", knn.app)
-# The main app
+app.add_app("Visualisasi", visualisasi.app)
+app.add_app("Naive Bayes", naive_bayes.app)
+
 app.run()
