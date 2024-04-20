@@ -4,8 +4,8 @@ import pandas as pd
 import preprocessor as p
 from textblob import TextBlob
 import nltk
-from nltk.stem import PorterStemmer
-from nltk.tokenize import word_tokenize
+# from nltk.stem import PorterStemmer
+# from nltk.tokenize import word_tokenize
 import seaborn as sns
 import matplotlib.pyplot as plt
 from wordcloud import WordCloud, STOPWORDS
@@ -20,18 +20,12 @@ def app():
     st.sidebar.number_input('Masukkan Size Untuk Data Training :')
     st.sidebar.button('Tampil Data')
     
-    st.sidebar.subheader('Sentiment Analysis :')
-    
-    st.sidebar.subheader('Split Data :')
-    st.sidebar.subheader('Data Traing : (62616) / Data Testing : (76478)')
-    st.sidebar.subheader(f'Jumlah Data : 654')
-    
-    st.header('Naive Bayes')
+    st.header('Metode Analisa dengan Naive Bayes')
     
     file_uploader = st.file_uploader('Upload Data CSV :', ['csv'])
     
     if file_uploader is not None:
-        data = pd.read_csv(file_uploader)
+        data = pd.read_csv(file_uploader, index_col=0)
         
         data_tweet = list(data['tweet_english'])
         polaritas = 0
@@ -55,6 +49,10 @@ def app():
 
             total += 1
             
+        st.write('Algorithm : K-NearestNeighbors')
+        baris_kolom = data.shape
+        st.write('Data Shape : ', baris_kolom)
+            
         col1, col2 = st.columns(2)
 
         # Kolom untuk tampilan visualisasi dan tampilan data deskripsi
@@ -72,12 +70,14 @@ def app():
             st.markdown("""
             ##### Deskripsi
             """)
-            st.text(f'Positif = {total_positif}')
-            st.text(f'Netral = {total_netral}')
-            st.text(f'Negatif = {total_negatif}')
-            st.text(f'Total Data = {total}') 
+            st.write('Positif : ', total_positif)
+            st.write('Netral : ', total_netral)
+            st.write('Negatif : ', total_negatif)
+            st.write('Total Data : ', total) 
         
         data['klasifikasi'] = status
+        
+        st.sidebar.write(f'Jumlah Data : ', total)
         
         # Visualisasi Wordcloud
         st.markdown("""
@@ -126,22 +126,20 @@ def app():
             train_set.append(n)
             
         cl = NaiveBayesClassifier(train_set)
-        st.markdown("""
-        #### Akurasi Test
-        """)
-        st.text(f'Akurasi Test : {cl.accuracy(dataset)}')
+        
+        st.sidebar.write('Akurasi Test : ', cl.accuracy(dataset))
         
         data_tweet = list(data['tweet_english'])
         polaritas = 0
 
         status = []
-        total_posistif = total_negatif = total_netral = total = 0
+        total_positif = total_negatif = total_netral = total = 0
 
         for i, tweet in enumerate(data_tweet):
             analysis = TextBlob(tweet, classifier=cl)
 
             if analysis.classify() == 'Positif':
-                total_posistif += 1
+                total_positif += 1
             elif analysis.classify() == 'Netral':
                 total_netral += 1
             else:
@@ -151,12 +149,12 @@ def app():
             total += 1
             
         st.markdown("""
-        ##### Hasil Analisis Data
+        #### Hasil Analisis Data Metode Naive Bayes
         """)
-        st.text(f'Positif = {total_positif}')
-        st.text(f'Netral = {total_netral}')
-        st.text(f'Negatif = {total_negatif}')
-        st.text(f'Total Data = {total}')
+        st.write('Positif : ', total_positif)
+        st.write('Netral : ', total_netral)
+        st.write('Negatif : ', total_negatif)
+        st.write('Total Data : ', total)
         
         status = pd.DataFrame({'klasifikasi_bayes': status})
         data['klasifikasi_bayes'] = status
@@ -166,13 +164,16 @@ def app():
 
         # Testing
         st.markdown("""
-        ##### Testing
+        #### Testing
         """)
+        hasil_klasifikasi = ''
         input_text = st.text_input('Masukkan Teks yang Ingin Diuji :')
-        hasil_klasifikasi = classify_text(input_text, cl)
-        st.text(f'\nHasil Klasifikasi untuk Text yang Dimasukkan : {hasil_klasifikasi}')
-        st.success(hasil_klasifikasi)
+        if st.button('Analisa'):
+            hasil_klasifikasi = classify_text(input_text, cl)
+            st.text(f'\nHasil Klasifikasi untuk Text yang Dimasukkan : {hasil_klasifikasi}')
+            st.success(hasil_klasifikasi)
         
+        st.sidebar.write('Data Traing : (62616) / Data Testing : (76478)')
 
 # Kumpulan Function-Function
 
