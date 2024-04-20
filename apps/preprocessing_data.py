@@ -1,4 +1,5 @@
 # Import library yang digunakan
+import os
 import streamlit as st
 import pandas as pd
 import re
@@ -41,12 +42,8 @@ def app():
         
         data_preprocessed = df.head(10)
         
-        st.sidebar.subheader('Simpan Data Preprocessing')
-        
-        # Button simpan data hasil preprocessing
-        if st.sidebar.button('Simpan'):
-            df.to_csv('hasil_preprocessing.csv')
-            st.success('Data Preprocessing Berhasil Disimpan')
+        os.makedirs('../data', exist_ok=True)
+        df.to_csv('../data/hasil_preprocessing.csv', index=False)
         
     col1, col2 = st.columns(2)
 
@@ -56,13 +53,15 @@ def app():
         ###### Original Text
         """)
         if file_uploader is not None:
-            st.dataframe(data)
+            dataframe1 = pd.DataFrame(data.head(10))
+            st.table(dataframe1)
     with col2:
         st.markdown("""
         ###### Processed Text
         """)
         if file_uploader is not None:
-            st.dataframe(data_preprocessed)
+            dataframe2 = pd.DataFrame(data_preprocessed)
+            st.table(dataframe2)
             
 
 # Kumpulan Function-Function

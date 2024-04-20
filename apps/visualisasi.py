@@ -1,6 +1,5 @@
 # Import library yag digunakan
 import streamlit as st
-import numpy as np
 import pandas as pd
 from nltk.probability import FreqDist
 import matplotlib.pyplot as plt
@@ -21,5 +20,11 @@ def app():
         
         all_tokens = [token for sublist in df['stemmed'] for token in sublist]
         freq_dist = FreqDist(all_tokens)
-        freq_dist.plot(30, cumulative=False)
-        st.pyplot()
+        
+        # Buat objek gambar Matplotlib
+        fig, ax = plt.subplots()
+        freq_dist.plot(30, cumulative=False)  # Menggunakan parameter cumulative=False
+        plt.tight_layout()  # Untuk memastikan tata letak gambar yang baik
+        
+        # Tampilkan gambar menggunakan st.pyplot()
+        st.pyplot(fig)
