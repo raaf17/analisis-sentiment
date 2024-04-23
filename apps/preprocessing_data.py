@@ -25,7 +25,7 @@ def app():
     st.sidebar.checkbox('Stemming', value=True)
     
     st.header('Preprocessing Data')
-
+    st.subheader("oke")
     file_uploader = st.file_uploader('Upload Data CSV :', ['csv'])
     
     if file_uploader is not None:
