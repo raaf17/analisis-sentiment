@@ -13,6 +13,7 @@ from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 # Function app untuk page preprocessing
 def app():
     # Bagian Sidebar
+    st.sidebar.write('Data yang Dibersihkan')
     st.sidebar.checkbox('Remove Username (@)', value=True)
     st.sidebar.checkbox('Remove ReTweet & Hastag', value=True)
     st.sidebar.checkbox('Remove URL or http', value=True)
@@ -41,27 +42,28 @@ def app():
         df['stemmed'] = df['stopwords'].apply(stemming_text)
         
         data_preprocessed = df.head(10)
-        
-        os.makedirs('../data', exist_ok=True)
-        df.to_csv('../data/hasil_preprocessing.csv', index=False)
-        
-    col1, col2 = st.columns(2)
 
-    # Kolom untuk tabel original text dan processed text
-    with col1:
-        st.markdown("""
-        ###### Original Text
-        """)
-        if file_uploader is not None:
-            dataframe1 = pd.DataFrame(data.head(10))
-            st.table(dataframe1)
-    with col2:
-        st.markdown("""
-        ###### Processed Text
-        """)
-        if file_uploader is not None:
-            dataframe2 = pd.DataFrame(data_preprocessed)
-            st.table(dataframe2)
+        df.to_csv('hasil_preprocessing.csv', index=False)
+        
+        col1, col2 = st.columns(2)
+
+        # Kolom untuk tabel original text dan processed text
+        with col1:
+            st.markdown("""
+            ###### Original Text
+            """)
+            if file_uploader is not None:
+                dataframe1 = pd.DataFrame(data.head(10))
+                st.table(dataframe1)
+        with col2:
+            st.markdown("""
+            ###### Processed Text
+            """)
+            if file_uploader is not None:
+                dataframe2 = pd.DataFrame(data_preprocessed)
+                st.table(dataframe2)
+    else:
+        st.warning("Silakan upload file CSV untuk Data Cleaning")
             
 
 # Kumpulan Function-Function
